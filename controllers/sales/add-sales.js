@@ -16,7 +16,7 @@ async function findProduct(barcode,id, branch_id){
      const mproduct = await product.findProductByBarcode(barcode,branch_id);
      return mproduct;
     }else{
-        console.log(id, branch_id 'id level');
+        console.log(id, branch_id, 'id level');
      const prodcutById = await product.findOne({_id: id, branch:branch_id})
      console.log(prodcutById);
      return prodcutById;
