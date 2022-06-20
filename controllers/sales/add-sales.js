@@ -10,12 +10,13 @@ const { product } = require("../../model/products/products");
 const { salesFieldValidation, Sales, } = require("../../model/sales/sales");
 
 async function findProduct(barcode,id, branch_id){
-    console.log(barcode,id, branch_id);
+   
     if (typeof barcode !='undefined'&&barcode!=null) {
+        console.log(barcode,id, branch_id, 'barcode level');
      const mproduct = await product.findProductByBarcode(barcode,branch_id);
      return mproduct;
     }else{
-        console.log(id, branch_id);
+        console.log(id, branch_id 'id level');
      const prodcutById = await product.findOne({_id: id, branch:branch_id})
      console.log(prodcutById);
      return prodcutById;
