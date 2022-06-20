@@ -20,7 +20,7 @@ const { addExpenses } = require('../controllers/Expenses/add-expenses');
 const { EditExpenses, deleteExpenses } = require('../controllers/Expenses/manage_expenses');
 const { viewExpenses } = require('../controllers/Expenses/view-expenses');
 const { addpaymentType } = require('../controllers/PaymentType/add-payment-type');
-const { viewPaymentType } = require('../controllers/PaymentType/view-payment-type');
+const { viewPaymentType, deletePaymentType } = require('../controllers/PaymentType/view-payment-type');
 const { addProducts } = require('../controllers/products/add-product');
 const { deleteProduct } = require('../controllers/products/delete-product');
 const { updateProducts, BalanceStockLevel } = require('../controllers/products/update-product');
@@ -133,7 +133,7 @@ router.delete('/delete-purchase/:id', isAdmin,deletePurchase);
 /****PAYMENT TYPE */
 router.post('/add-payment-type', addpaymentType);
 router.get('/view-payment-type', viewPaymentType);
-
+router.delete('/delete-payment-type/:paymentId', isAdmin,deletePaymentType)
 
 /******EXPENSES  ***/
 router.post('/add-expenses', addExpenses);
