@@ -8,7 +8,6 @@ const salesFieldValidation = joi.object({
   items: joi.array().min(1).required(),
   total_amount: joi.number().required(),
   branch: joi.string().required(),
-  // customer_id: joi.string(),
   payment_type: joi.string().required(),
   created_at: joi.date().required()
 });
