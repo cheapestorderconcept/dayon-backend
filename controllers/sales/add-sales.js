@@ -50,8 +50,9 @@ const addSales = async(req,res,next)=>{
                     }  
                     if (mSales.items[index].quantity <= mproduct.current_product_quantity) {
                         console.log(mSales.items[index].incoming_price, 'incoming price');
-                     
+                        console.log(mSales[index], 'original price')
                         const updatedProduct =await updateProduct(mproduct._id,branch_id,datas)
+
                         const data = {
                             invoice_number:mSales.items[index].invoice_number,
                             created_at: `${mSales.items[index].created_at}Z`,
@@ -63,7 +64,7 @@ const addSales = async(req,res,next)=>{
                             product_name: mproduct.product_name,
                             quantity: mSales.items[index].quantity,
                             barcode: mSales.items[index].barcode,
-                            selling_price:  mSales.items[index].incoming_price!=''&& typeof mSales.items[index].incoming_price!='undefined'?mSales.items[index].incoming_price:mSales[index].original_selling_price,
+                            selling_price:  mSales.items[index].incoming_price!=''&& typeof mSales.items[index].incoming_price!='undefined'?mSales.items[index].incoming_price:mSales[index].original_price,
                             selectedProduct:mSales.items[index].selectedProduct,
                             product: mSales.items[index].product,
                             amount: mSales.items[index].amount,
