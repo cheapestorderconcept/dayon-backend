@@ -61,7 +61,7 @@ const addSales = async(req,res,next)=>{
                             product_name: mproduct.product_name,
                             quantity: mSales.items[index].quantity,
                             barcode: mSales.items[index].barcode,
-                            selling_price:  mSales.items[index].incoming_selling_price!=''&&typeof mSales.items[index].incoming_selling_price!='undefined'?mSales.items[index].incoming_price:mSales.items[index].original_selling_price,
+                            selling_price:  mSales.items[index].incoming_selling_price!=''&&typeof mSales.items[index].incoming_selling_price!='undefined'?mSales.items[index].incoming_selling_price:mSales.items[index].original_selling_price,
                             selectedProduct:mSales.items[index].selectedProduct,
                             product: mSales.items[index].product,
                             amount: mSales.items[index].amount,
