@@ -12,7 +12,7 @@ const reprintReceipt = async function reprintReceipt(req,res,next){
            return next( new HttpError(400, 'Please provide receipt invoice number'));
        } 
 
-      const sales = Sales.find({invoice_number:invoiceNumber});
+      const sales =await Sales.find({invoice_number:invoiceNumber});
       if (sales&&sales.length>0) {
           httpResponse({status_code:200, response_message:'Sales receipt available', data:sales, res});
       }else{
