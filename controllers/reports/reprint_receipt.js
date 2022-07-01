@@ -7,7 +7,7 @@ const { Sales } = require("../../model/sales/sales");
 
 const reprintReceipt = async function reprintReceipt(req,res,next){
     try {
-       const {invoiceNumber} = req.params;
+       const {invoiceNumber} = req.query;
        if (!invoiceNumber) {
            return next( new HttpError(400, 'Please provide receipt invoice number'));
        } 

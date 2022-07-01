@@ -153,7 +153,7 @@ router.get('/view-customer-deposit/:customerId', viewCustomerDeposit);
 router.get('/view-all-customers', viewAllCustomers);
 router.put('/update-customer/:customerId', updateCustomers);
 router.delete('/delete-customer/:customerId', deleteCustomers);
-router.get('/reprint-sales-receipt/:invoiceNumber', reprintReceipt);
+router.get('/reprint-sales-receipt?', reprintReceipt);
 /*****END ***/
 /****DEPOSITS ROUTE */
 // router.post('/add-deposits', addDeposit);
