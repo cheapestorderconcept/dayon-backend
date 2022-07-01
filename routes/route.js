@@ -33,6 +33,7 @@ const { depositReport } = require('../controllers/reports/deposit-report');
 const { fetchOutOfStock } = require('../controllers/reports/out-of-stock');
 const { fetchProductPrice, stockLevel } = require('../controllers/reports/product-price-list');
 const { viewProfitLossReport } = require('../controllers/reports/profit-loss-report');
+const { reprintReceipt } = require('../controllers/reports/reprint_receipt');
 const { viewSalesReport } = require('../controllers/reports/sales-report');
 const { addDeposit } = require('../controllers/sales/add-deposit');
 const { addSales } = require('../controllers/sales/add-sales');
@@ -151,7 +152,8 @@ router.get('/view-customer-purchased/:customerId', viewCustomerPurchased);
 router.get('/view-customer-deposit/:customerId', viewCustomerDeposit);
 router.get('/view-all-customers', viewAllCustomers);
 router.put('/update-customer/:customerId', updateCustomers);
-router.delete('/delete-customer/:customerId', deleteCustomers)
+router.delete('/delete-customer/:customerId', deleteCustomers);
+router.get('/reprint-sales-receipt/:invoice_number', reprintReceipt);
 /*****END ***/
 /****DEPOSITS ROUTE */
 // router.post('/add-deposits', addDeposit);
