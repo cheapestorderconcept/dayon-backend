@@ -41,7 +41,7 @@ const addSales = async(req,res,next)=>{
          return next(e);  
        }   
        for (let index = 0; index < mSales.items.length; index++) {
-         const mproduct =await findProduct(mSales.items[index].barcode, mSales.items[index].product_id,branch_id);
+         const mproduct =await findProduct(mSales.items[index].barcode, mSales.items[index]._id,branch_id);
                 if (mproduct) {
                     console.log(mproduct);
                     const datas = {
@@ -51,8 +51,8 @@ const addSales = async(req,res,next)=>{
                     if (mSales.items[index].quantity <= mproduct.current_product_quantity) {
                         const updatedProduct =await updateProduct(mproduct._id,branch_id,datas)
                         const data = {
-                            invoice_number:mSales.items[index].invoice_number,
-                            created_at: `${mSales.items[index].created_at}Z`,
+                            invoice_number:mSales.invoice_number,
+                            created_at: `${mSales.created_at}Z`,
                             payment_type:mSales.payment_type,
                             customer_id: mSales.customer_id,
                             branch: mSales.branch, //add at backend
@@ -60,12 +60,11 @@ const addSales = async(req,res,next)=>{
                             cost_price: mproduct.product_price,
                             product_name: mproduct.product_name,
                             quantity: mSales.items[index].quantity,
-                            barcode: mSales.items[index].barcode,
-                            selling_price:  mSales.items[index].incoming_selling_price!=''&&typeof mSales.items[index].incoming_selling_price!='undefined'?mSales.items[index].incoming_selling_price:mSales.items[index].original_selling_price,
+                            barcode:mproduct.product_barcode,
+                            selling_price:  mproduct.product_price * mSales.items[index].quantity,
                             selectedProduct:mSales.items[index].selectedProduct,
-                            product: mSales.items[index].product,
-                            amount: mSales.items[index].amount,
-                            serial_number: mSales.items[index].serial_number
+                            product: mSales.items[index]._id,
+                            amount: mproduct.product_price * mSales.items[index].quantity ,
                         }
                         if (mSales.customer_id) {
                             const existingRecord = await customerRecord.findRecord(mSales.customer_id);

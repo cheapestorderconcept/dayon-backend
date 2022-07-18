@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const joi = require('joi');
 
-
 const salesFieldValidation = joi.object({
   invoice_number: joi.string().required(),
   items: joi.array().min(1).required(),
