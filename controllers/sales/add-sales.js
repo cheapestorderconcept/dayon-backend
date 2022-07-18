@@ -33,7 +33,6 @@ const addSales = async(req,res,next)=>{
          return next(e);  
        }   
        for (let index = 0; index < mSales.items.length; index++) {
-        console.log(mSales);
          const mproduct =await findProduct(mSales.items[index]._id,branch_id);
                 if (mproduct) {
                     const datas = {
@@ -58,16 +57,7 @@ const addSales = async(req,res,next)=>{
                             product: mSales.items[index]._id,
                             amount: mproduct.product_price * mSales.items[index].quantity ,
                         }
-                        // if (mSales.customer_id) {
-                        //     const existingRecord = await customerRecord.findRecord(mSales.customer_id);
-                        //     const {total_purchased,total_amount_paid}= existingRecord;
-                        //     const data ={
-                        //      total_amount_paid: total_amount_paid + Number(mSales.items[index].amount),
-                        //      total_purchased: total_purchased + Number(mSales.items[index].amount),
-                        //      net_balance: total_purchased - total_amount_paid
-                        //     }
-                        //   await customerRecord.updateRecord(mSales.customer_id,data)
-                        // }
+                     
                         const addNewSales = Sales.createSales(data);
                         addNewSales.save().then((savedProduct)=>{
                             returnArray[index] = {product_name: '', product_price: 0}
