@@ -32,6 +32,7 @@ const addSales = async(req,res,next)=>{
          return next(e);  
        }   
        for (let index = 0; index < mSales.items.length; index++) {
+        console.log(mSales);
          const mproduct =await findProduct(mSales.items[index]._id,branch_id);
                 if (mproduct) {
                     const datas = {
