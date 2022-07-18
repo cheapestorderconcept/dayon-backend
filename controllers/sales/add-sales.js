@@ -9,9 +9,9 @@ const { customerRecord } = require("../../model/customer/customer-txn-list");
 const { product } = require("../../model/products/products");
 const { salesFieldValidation, Sales, } = require("../../model/sales/sales");
 
-async function findProduct(id, branch_id){
+async function findProduct(barcode,id, branch_id){
     const prodcutById = await product.findOne({_id: id, branch:branch_id})
-    return prodcutById;
+     return prodcutById;
    }
 
    async function updateProduct(id, branch_id,data){
@@ -22,7 +22,6 @@ async function findProduct(id, branch_id){
    }
 
 const addSales = async(req,res,next)=>{
-    console.log("hewllo");
     try {  
         const {branch_id} = req.userData;
         let returnArray = [];
@@ -40,24 +39,34 @@ const addSales = async(req,res,next)=>{
                         previous_product_quantity: Number(mproduct.current_product_quantity)
                     }  
                     if (mSales.items[index].quantity <= mproduct.current_product_quantity) {
-                        const updatedProduct =await updateProduct(mproduct._id,branch_id,datas)
+                        await updateProduct(mproduct._id,branch_id,datas)
                         const data = {
                             invoice_number:mSales.invoice_number,
                             created_at: `${mSales.created_at}Z`,
                             payment_type:mSales.payment_type,
                             customer_id: mSales.customer_id,
                             branch: mSales.branch, //add at backend
-                            product_id: mSales.items[index].product_id,
+                            product_id: mSales.items[index]._id,
                             cost_price: mproduct.product_price,
                             product_name: mproduct.product_name,
                             quantity: mSales.items[index].quantity,
-                            barcode:mproduct.product_barcode,
-                            selling_price:  mproduct.product_price * mSales.items[index].quantity,
+                            barcode: mproduct.product_barcode,
+                            selling_price:  mproduct.product_price,
                             selectedProduct:mSales.items[index].selectedProduct,
-                            product: mSales.items[index]._id,
-                            amount: mproduct.product_price * mSales.items[index].quantity ,
+                            product: mSales.items[index].product,
+                            amount: mproduct.product_price * mSales.items[index].quantity,
+                        
                         }
-                     
+                        if (mSales.customer_id && mSales.customer_id !='') {
+                            const existingRecord = await customerRecord.findRecord(mSales.customer_id);
+                            const {total_purchased,total_amount_paid}= existingRecord;
+                            const data ={
+                             total_amount_paid: total_amount_paid + Number(mSales.items[index].amount),
+                             total_purchased: total_purchased + Number(mSales.items[index].amount),
+                             net_balance: total_purchased - total_amount_paid
+                            }
+                          await customerRecord.updateRecord(mSales.customer_id,data)
+                        }
                         const addNewSales = Sales.createSales(data);
                         addNewSales.save().then((savedProduct)=>{
                             returnArray[index] = {product_name: '', product_price: 0}
