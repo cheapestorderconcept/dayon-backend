@@ -9,18 +9,9 @@ const { customerRecord } = require("../../model/customer/customer-txn-list");
 const { product } = require("../../model/products/products");
 const { salesFieldValidation, Sales, } = require("../../model/sales/sales");
 
-async function findProduct(barcode,id, branch_id){
-   
-    if (typeof barcode !='undefined'&&barcode!=null&&barcode!='') {
-        console.log(barcode,id, branch_id, 'barcode level');
-     const mproduct = await product.findProductByBarcode(barcode,branch_id);
-     return mproduct;
-    }else{
-        console.log(id, branch_id, 'id level');
-     const prodcutById = await product.findOne({_id: id, branch:branch_id})
-     console.log(prodcutById);
-     return prodcutById;
-    }
+async function findProduct(id, branch_id){
+    const prodcutById = await product.findOne({_id: id, branch:branch_id})
+    return prodcutById;
    }
 
    async function updateProduct(id, branch_id,data){
@@ -41,9 +32,8 @@ const addSales = async(req,res,next)=>{
          return next(e);  
        }   
        for (let index = 0; index < mSales.items.length; index++) {
-         const mproduct =await findProduct(mSales.items[index].barcode, mSales.items[index]._id,branch_id);
+         const mproduct =await findProduct(mSales.items[index]._id,branch_id);
                 if (mproduct) {
-                    console.log(mproduct);
                     const datas = {
                         current_product_quantity: Number(mproduct.current_product_quantity) -Number(mSales.items[index].quantity),
                         previous_product_quantity: Number(mproduct.current_product_quantity)
