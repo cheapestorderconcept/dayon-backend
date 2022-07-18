@@ -4,6 +4,7 @@ const joi = require('joi');
 
 const salesFieldValidation = joi.object({
   invoice_number: joi.string().required(),
+  customer_id: joi.any(),
   items: joi.array().min(1).required(),
   total_amount: joi.number().required(),
   branch: joi.string().required(),
