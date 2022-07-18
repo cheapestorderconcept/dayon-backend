@@ -22,6 +22,7 @@ async function findProduct(id, branch_id){
    }
 
 const addSales = async(req,res,next)=>{
+    console.log("hewllo");
     try {  
         const {branch_id} = req.userData;
         let returnArray = [];
