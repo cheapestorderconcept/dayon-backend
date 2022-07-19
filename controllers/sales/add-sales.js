@@ -28,7 +28,7 @@ const addSales = async(req,res,next)=>{
        const mSales = await salesFieldValidation.validateAsync(req.body); 
        const doesSalesExist =await Sales.findSingleSales(mSales.invoice_number,branch_id);
        if (doesSalesExist) {
-         const e = new HttpError(400, "A sales already existed with this invoice number");
+         const e = new HttpError(400, "A sales already existed with this invoice number.");
          return next(e);  
        }   
        for (let index = 0; index < mSales.items.length; index++) {
