@@ -66,6 +66,8 @@ const addSales = async(req,res,next)=>{
                         //      total_purchased: total_purchased + Number(mSales.items[index].amount),
                         //      net_balance: total_purchased - total_amount_paid
                         //     }
+
+                        
                         //   await customerRecord.updateRecord(mSales.customer_id,data)
                         }
                         const addNewSales = Sales.createSales(data);
