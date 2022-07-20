@@ -9,7 +9,7 @@ const { customerRecord } = require("../../model/customer/customer-txn-list");
 const { product } = require("../../model/products/products");
 const { salesFieldValidation, Sales, } = require("../../model/sales/sales");
 
-async function findProduct(barcode,id, branch_id){
+async function findProduct(id, branch_id){
     const prodcutById = await product.findOne({_id: id, branch:branch_id})
      return prodcutById;
    }
