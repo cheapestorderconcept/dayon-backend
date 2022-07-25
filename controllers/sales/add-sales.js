@@ -39,7 +39,7 @@ const addSales = async(req,res,next)=>{
                         previous_product_quantity: Number(mproduct.current_product_quantity)
                     }  
                     if (mSales.items[index].quantity <= mproduct.current_product_quantity) {
-                        await updateProduct(mproduct._id,branch_id,datas)
+                        await updateProduct(mproduct._id,branch_id,datas);
                         const data = {
                             invoice_number:mSales.invoice_number,
                             created_at: `${mSales.created_at}Z`,
@@ -54,7 +54,7 @@ const addSales = async(req,res,next)=>{
                             selling_price:  mproduct.product_price,
                             selectedProduct:mSales.items[index].selectedProduct,
                             product: mSales.items[index].product_name,
-                            amount: mproduct.product_price * mSales.items[index].quantity,
+                            amount: mproduct.selling_price * mSales.items[index].quantity,
                         
                         }
                         if (mSales.customer_id && mSales.customer_id !='') {
@@ -88,6 +88,7 @@ const addSales = async(req,res,next)=>{
       joiError(error,next);  
     }
 }
+
 
 module.exports={
     addSales
