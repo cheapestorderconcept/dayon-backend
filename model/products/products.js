@@ -8,7 +8,7 @@ const productFieldValidation = joi.object({
   product_name: joi.string().required(),
   product_price: joi.number().required(),
   product_barcode: '',
-  current_product_quantity: joi.any(),
+  current_product_quantity: joi.number().required(),
   selling_price: '',
   product_brand: joi.string().required(),
   supplier: joi.string().required(),

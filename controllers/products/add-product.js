@@ -11,6 +11,7 @@ const addProducts = async (req, res, next) => {
         const { product_name,
             product_price,
             selling_price,
+            current_product_quantity,
             product_barcode,
             product_brand,
             supplier } = req.body
@@ -18,6 +19,7 @@ const addProducts = async (req, res, next) => {
             product_name,
             product_barcode,
             product_price,
+            current_product_quantity,
             selling_price,
             supplier,
             product_brand
