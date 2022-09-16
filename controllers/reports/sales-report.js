@@ -10,7 +10,8 @@ const {Sales} = require("../../model/sales/sales");
 const VALIADATIONOBJECT = joi.object({
     from: joi.date().required(),
      to: joi.date().required(),
-     branch: joi.string().required()
+     branch: joi.string().required(),
+     payment_type: ''
 })
 
 const viewSalesReport =async(req,res,next)=>{
@@ -27,9 +28,14 @@ const viewSalesReport =async(req,res,next)=>{
             }}
           ]);
           if (FILTEREDRESULTS&&FILTEREDRESULTS.length>0) {
-            console.log(VALIADATIONOBJECT.branch);
-            const branchReport = FILTEREDRESULTS.filter(item=>item.branch==req.query.branch);
-          httpResponse({status_code:200, response_message:'Sales record available', data:branchReport, res});
+            if (req.query.payment_type=='') {
+              const branchReport = FILTEREDRESULTS.filter(item=>item.branch==req.query.branch);
+              httpResponse({status_code:200, response_message:'Sales record available', data:branchReport, res});
+            }else{
+              const branchReport = FILTEREDRESULTS.filter(item=>item.branch==req.query.branch&&item.payment_type==req.query.payment_type);
+              httpResponse({status_code:200, response_message:'Sales record available', data:branchReport, res});
+            }
+           
           }else{
               const e = new HttpError(404, "No record found within this range of date");
               return next(e);
