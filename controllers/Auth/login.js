@@ -59,7 +59,7 @@ const loginStaff =async(req,res,next)=>{
                 return next(err); 
             }else{
                 const token  =  signToken({payload});
-                httpResponse({status_code:200, response_message:'success',data:{token},res});
+                httpResponse({status_code:200, response_message:'success',data:{token, username: staff.username},res});
                 return;
             }
            
