@@ -16,7 +16,7 @@ const authValidation = async(req,res,next)=>{
         }
      const staff = await User.findUserByUserName(staff_username);
      if (staff) {
-        if (staff.role== staffRoles.admin) {
+        if (staff.role== staffRoles.admin || staff.role ==staffRoles.auditor) {
             next();
         }else{
          if (staff.branch==branch_id) {
