@@ -37,9 +37,9 @@ const viewSalesReport =async(req,res,next)=>{
                 httpResponse({status_code:200, response_message:'Sales record available', data:branchReport, res});
               }else{
                 const e = new HttpError(404, "No sales is available for the choosing payment type");
-                return next(e);
+                return next(e)
               }
-   
+  
               
             }
            
