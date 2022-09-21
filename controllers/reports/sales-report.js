@@ -28,6 +28,7 @@ const viewSalesReport =async(req,res,next)=>{
           ]);
           if (FILTEREDRESULTS&&FILTEREDRESULTS.length>0) {
             if (req.query.payment_type==''||!req.query.payment_type) {
+              console.log(FILTEREDRESULTS);
               httpResponse({status_code:200, response_message:'Sales record available', data:FILTEREDRESULTS, res});
             }else {
               const serializedPaymentType = req.query.payment_type;
