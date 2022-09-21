@@ -23,7 +23,6 @@ const viewSalesReport =async(req,res,next)=>{
               "$and": [
                 {"branch": req.query.branch},
                 { "created_at": { "$gte": VALIDATEDOBJECT.from, "$lte": VALIDATEDOBJECT.to }},
-
               ]
             }}
           ]);
