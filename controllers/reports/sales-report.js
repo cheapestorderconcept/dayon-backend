@@ -11,14 +11,13 @@ const VALIADATIONOBJECT = joi.object({
     from: joi.date().required(),
      to: joi.date().required(),
      branch: joi.string().required(),
-     payment_type: ''
+     payment_type: joi.any()
 })
 
 const viewSalesReport =async(req,res,next)=>{
     try {
-  
+     const serializedBranch = JSON.parse(req.query.branch) 
       const VALIDATEDOBJECT = await VALIADATIONOBJECT.validateAsync(req.query)
-      console.log( req.query);
       const FILTEREDRESULTS =await  Sales.aggregate([
             { "$match": {
               "$and": [
@@ -29,10 +28,11 @@ const viewSalesReport =async(req,res,next)=>{
           ]);
           if (FILTEREDRESULTS&&FILTEREDRESULTS.length>0) {
             if (req.query.payment_type==''||!req.query.payment_type) {
-              const branchReport = FILTEREDRESULTS.filter(item=>item.branch==req.query.branch);
+              const branchReport = FILTEREDRESULTS.filter(item=>item.branch==serializedBranch);
               httpResponse({status_code:200, response_message:'Sales record available', data:branchReport, res});
             }else {
-              const branchReport = FILTEREDRESULTS.filter(item=>item.branch==req.query.branch&&item.payment_type==req.query.payment_type);
+              const serializedPaymentType = JSON.parse(req.query.payment_type);
+              const branchReport = FILTEREDRESULTS.filter(item=>item.branch==serializedBranch&&item.payment_type==serializedPaymentType);
               if (branchReport.length>0) {
                 httpResponse({status_code:200, response_message:'Sales record available', data:branchReport, res});
               }else{
