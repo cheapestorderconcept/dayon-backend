@@ -17,6 +17,7 @@ const VALIADATIONOBJECT = joi.object({
 const viewSalesReport =async(req,res,next)=>{
     try {
      const serializedBranch = req.query.branch;
+     console.log(req.query.branch)
       const VALIDATEDOBJECT = await VALIADATIONOBJECT.validateAsync(req.query)
       const FILTEREDRESULTS =await  Sales.aggregate([
             { "$match": {
