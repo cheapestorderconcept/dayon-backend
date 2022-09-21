@@ -16,7 +16,7 @@ const VALIADATIONOBJECT = joi.object({
 
 const viewSalesReport =async(req,res,next)=>{
     try {
-     const serializedBranch = JSON.parse(req.query.branch) 
+     const serializedBranch = req.query.branch;
       const VALIDATEDOBJECT = await VALIADATIONOBJECT.validateAsync(req.query)
       const FILTEREDRESULTS =await  Sales.aggregate([
             { "$match": {
@@ -31,7 +31,7 @@ const viewSalesReport =async(req,res,next)=>{
               const branchReport = FILTEREDRESULTS.filter(item=>item.branch==serializedBranch);
               httpResponse({status_code:200, response_message:'Sales record available', data:branchReport, res});
             }else {
-              const serializedPaymentType = JSON.parse(req.query.payment_type);
+              const serializedPaymentType = req.query.payment_type;
               const branchReport = FILTEREDRESULTS.filter(item=>item.branch==serializedBranch&&item.payment_type==serializedPaymentType);
               if (branchReport.length>0) {
                 httpResponse({status_code:200, response_message:'Sales record available', data:branchReport, res});
