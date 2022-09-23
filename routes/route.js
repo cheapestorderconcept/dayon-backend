@@ -167,7 +167,7 @@ router.get('/view-product-price', fetchProductPrice);
 router.get('/view-deposit-reports?', depositReport);
 router.get('/view-sales-report?', isAdmin ,viewSalesReport);
 router.get('/view-stock-level?', isAdmin,stockLevel);
-router.put('/balance-stock-level/:id', isAdminOrEditor,BalanceStockLevel);
+router.put('/balance-stock-level/:id', isAdmin,BalanceStockLevel);
 router.delete('/delete-product/:id', deleteProduct);
 router.get('/view-profit-loss', isAdmin,viewProfitLossReport);
 
