@@ -32,6 +32,10 @@ const addSales = async(req,res,next)=>{
          return next(e);  
        }   
        for (let index = 0; index < mSales.items.length; index++) {
+        if(mSales.items[index].quantity<1){
+            const e = new HttpError(400, "One of your items has zero has quantity. Quantity must be greater or equals 1");
+             return next(e);  
+           }
          const mproduct =await findProduct(mSales.items[index]._id,branch_id);
                 if (mproduct) {
                     const datas = {
