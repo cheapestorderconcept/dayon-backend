@@ -22,6 +22,25 @@ const viewAllCustomers = async function viewAllCustomers(req, res, next) {
 }
 
 
+const viewSingleCustomer = async function viewSingleCustomer(req,res,next){
+        try {
+         const {customerId} = req.params;
+         const customer = await Customer.viewSingleCustomer(customerId);
+         if (customer) {
+             httpResponse({ status_code: 200, response_message: 'Customers available', data: { customer }, res });
+         } else {
+             const e = new HttpError(404, 'You have not registered this customer');
+             return next(e);
+         }
+        } catch (error) {
+        console.log(error);
+        const e = new HttpError(500, 'Internal server error');
+        return next(e);
+        }
+}
+
+
 module.exports={
-    viewAllCustomers
+    viewAllCustomers,
+    viewSingleCustomer
 }

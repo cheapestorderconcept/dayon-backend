@@ -8,6 +8,8 @@ const newCustomerSchema = new schema({
     first_name: {type: String, required:true},
     last_name: {type:String, required:true},
     branch:{type:String},
+    customer_current_debt: {type:Number},
+    payment_due: {type:Number},
     email: {type: String, required:true},
     address: {type:String, required:true},
     phone_number: {type:String, required:true}
@@ -15,15 +17,10 @@ const newCustomerSchema = new schema({
 
 
 newCustomerSchema.statics.createNewCustomer = async function createNewCustomer(customerDetails,metadata){
-    const {first_name, last_name,email,address,phone_number}=customerDetails
     const {branch} = metadata
     const customer = new  Customer({
-        first_name,
-        last_name,
-        branch,
-        email,
-        address,
-        phone_number
+        ...customerDetails,
+        branch
     });
     const c = customer.save()
     return c;

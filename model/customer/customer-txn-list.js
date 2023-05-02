@@ -15,8 +15,9 @@ const recordSchema = new mongoose.Schema({
 })
 
 
+
 recordSchema.statics.createNewRecord = async function createNewRecord(customer){
-    const newRec = await customerRecord({
+    const newRec = await  new customerRecord({
         customer
     })
 

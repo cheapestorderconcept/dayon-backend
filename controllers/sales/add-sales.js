@@ -5,7 +5,9 @@
 const { HttpError } = require("../../middlewares/errors/http-error");
 const joiError = require("../../middlewares/errors/joi-error");
 const { httpResponse } = require("../../middlewares/http/http-response");
+const { Customer } = require("../../model/customer/customer");
 const { customerRecord } = require("../../model/customer/customer-txn-list");
+const { customerTxnHistory } = require("../../model/customer/txn-history");
 const { product } = require("../../model/products/products");
 const { salesFieldValidation, Sales, } = require("../../model/sales/sales");
 
@@ -23,14 +25,15 @@ async function findProduct(id, branch_id){
 
 const addSales = async(req,res,next)=>{
     try {  
+        // connect hockey ankle elevator verb tomato beef vast buzz donkey secret marriage
         const {branch_id} = req.userData;
         let returnArray = [];
-       const mSales = await salesFieldValidation.validateAsync(req.body); 
-       const doesSalesExist =await Sales.findSingleSales(mSales.invoice_number,branch_id);
+       const [mSales,doesSalesExist] = await Promise.all([salesFieldValidation.validateAsync(req.body),Sales.findSingleSales(req.body.invoice_number,branch_id)])
        if (doesSalesExist) {
          const e = new HttpError(400, "A sales already existed with this invoice number.");
          return next(e);  
        }   
+       
        for (let index = 0; index < mSales.items.length; index++) {
         if(mSales.items[index].quantity<1){
             const e = new HttpError(400, "One of your items has zero has quantity. Quantity must be greater or equals 1");
@@ -55,27 +58,36 @@ const addSales = async(req,res,next)=>{
                             product_name: mproduct.product_name,
                             quantity: mSales.items[index].quantity,
                             barcode: mproduct.product_barcode,
-                            selling_price:  mproduct.selling_price,
+                            selling_price:  mproduct.product_price,
                             selectedProduct:mSales.items[index].selectedProduct,
                             product: mSales.items[index].product_name,
                             amount: mproduct.selling_price * mSales.items[index].quantity,
                         
                         }
-                        if (mSales.customer_id && mSales.customer_id !='') {
-                            const existingRecord = await customerRecord.findRecord(mSales.customer_id);
-                            const {total_purchased,total_amount_paid}= existingRecord;
-                            const data ={
-                             total_amount_paid: total_amount_paid + Number(mSales.items[index].amount),
-                             total_purchased: total_purchased + Number(mSales.items[index].amount),
-                             net_balance: total_purchased - total_amount_paid
-                            }
-                          await customerRecord.updateRecord(mSales.customer_id,data)
-                        }
                         const addNewSales = Sales.createSales(data);
-                        addNewSales.save().then((savedProduct)=>{
+                        addNewSales.save().then(async(savedProduct)=>{
                             returnArray[index] = {product_name: '', product_price: 0}
                             if (Object.keys(returnArray).length==mSales.items.length) {
                                 httpResponse({status_code:200, response_message:'Sales successfully added',data:savedProduct,res});
+                                const customer =  await Customer.viewSingleCustomer(mSales.customer_id) 
+                                const data ={
+                                    customer_current_debt: Number(customer.customer_current_debt) + Number(mSales.total_amount) - Number(mSales.amount_paid),
+                                    payment_due:  Number(customer.customer_current_debt) -  Number(mSales.total_amount)
+                                   }
+                                const updateRec = await Customer.updateCustomer(data,mSales.customer_id)
+                                const totalDebt = Number(updateRec.customer_current_debt) + Number(mSales.total_amount);
+                                const history = {
+                                    customer_current_debt: totalDebt,
+                                    amount: mSales.total_amount,
+                                    invoice_number:mSales.invoice_number,
+                                    total_amount_paid: Number(mSales.amount_paid),
+                                    created_at: `${mSales.created_at}Z`,
+                                    payment_due:totalDebt>0? totalDebt - Number(mSales.amount_paid) :0,
+                                    customer: mSales.customer_id ,
+                                    customer_fullname: `${customer.first_name} ${customer.last_name}`
+                                  }
+                                customerTxnHistory.createTxnHistory(history);
+                             
                             }
 
                         })
