@@ -11,10 +11,10 @@ const { deleteProductBrand } = require('../controllers/brand/delete-brand');
 const { updateBrand } = require('../controllers/brand/update-brand');
 const { viewAllBrands } = require('../controllers/brand/view-brands');
 const { addNewCustomer } = require('../controllers/customers/add-customers');
-const { viewTransactionHistory, viewCustomerPurchased, viewCustomerDeposit } = require('../controllers/customers/customer-txn');
+const { viewTransactionHistory, viewCustomerPurchased, viewCustomerDeposit, updateCustomerPayment } = require('../controllers/customers/customer-txn');
 const { deleteCustomers } = require('../controllers/customers/delete-customer');
 const { updateCustomers } = require('../controllers/customers/update-customer');
-const { viewAllCustomers } = require('../controllers/customers/view-customers');
+const { viewAllCustomers, viewSingleCustomer } = require('../controllers/customers/view-customers');
 const { addExpensesCategory, viewCategory } = require('../controllers/Expenses/add-category');
 const { addExpenses } = require('../controllers/Expenses/add-expenses');
 const { EditExpenses, deleteExpenses } = require('../controllers/Expenses/manage_expenses');
@@ -147,6 +147,7 @@ router.delete('/delete-expenses/:id', isAdmin,deleteExpenses);
 /***customer and individual transaction management */
 
 router.post('/add-customer', addNewCustomer);
+router.get('/get-customer/:customerId', viewSingleCustomer);
 router.get('/view-customer-history/:customerId', viewTransactionHistory)
 router.get('/view-customer-purchased/:customerId', viewCustomerPurchased);
 router.get('/view-customer-deposit/:customerId', viewCustomerDeposit);
@@ -154,6 +155,7 @@ router.get('/view-all-customers', viewAllCustomers);
 router.put('/update-customer/:customerId', updateCustomers);
 router.delete('/delete-customer/:customerId', deleteCustomers);
 router.get('/reprint-sales-receipt?', reprintReceipt);
+router.put('/update-payment', updateCustomerPayment);
 /*****END ***/
 /****DEPOSITS ROUTE */
 // router.post('/add-deposits', addDeposit);
@@ -167,7 +169,7 @@ router.get('/view-product-price', fetchProductPrice);
 router.get('/view-deposit-reports?', depositReport);
 router.get('/view-sales-report?', isAdmin ,viewSalesReport);
 router.get('/view-stock-level?', isAdmin,stockLevel);
-router.put('/balance-stock-level/:id', isAdmin,BalanceStockLevel);
+router.put('/balance-stock-level/:id', isAdminOrEditor,BalanceStockLevel);
 router.delete('/delete-product/:id', deleteProduct);
 router.get('/view-profit-loss', isAdmin,viewProfitLossReport);
 

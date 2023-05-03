@@ -4,7 +4,9 @@ const joi = require('joi');
 
 const salesFieldValidation = joi.object({
   invoice_number: joi.string().required(),
-  customer_id: joi.any(),
+  customer_id: joi.any().required(),
+  total_amount: joi.any().required(),
+  amount_paid: joi.any().required(),
   items: joi.array().min(1).required(),
   total_amount: joi.number().required(),
   branch: joi.string().required(),
@@ -37,7 +39,7 @@ salesSchema.statics.createSales = function createSales(sales){
 
 
 salesSchema.statics.findSales = async function findsales(){
-    const sales = await Sales.find({}).sort({_id:-1}).limit(50);
+    const sales = await Sales.find({});
     return sales;
 }
 
