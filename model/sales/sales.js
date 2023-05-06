@@ -39,8 +39,8 @@ salesSchema.statics.createSales = function createSales(sales){
 
 
 salesSchema.statics.findSales = async function findsales(){
-    const sales = await Sales.find({});
-    return sales;
+  const sales = await Sales.find({}).sort({_id:-1}).limit(10);
+  return sales;
 }
 
 salesSchema.statics.findIndividualCustomerSales = async function findsales(customer_id,branch){

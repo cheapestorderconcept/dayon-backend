@@ -8,8 +8,8 @@ const newCustomerSchema = new schema({
     first_name: {type: String, required:true},
     last_name: {type:String, required:true},
     branch:{type:String},
-    customer_current_debt: {type:Number},
-    payment_due: {type:Number},
+    customer_current_debt: {type:Number, default: 0},
+    payment_due: {type:Number, default:0},
     email: {type: String, required:true},
     address: {type:String, required:true},
     phone_number: {type:String, required:true}
