@@ -7,8 +7,8 @@ const mongoose = require("mongoose");
 
 
 
-const secret = crypto.randomBytes(16);
-const salt = bcrypt.genSaltSync(16, secret);
+const secret = crypto.randomBytes(12);
+const salt = bcrypt.genSaltSync(12, secret);
 
 async function hashedPassword({password}){
     if(!password){
