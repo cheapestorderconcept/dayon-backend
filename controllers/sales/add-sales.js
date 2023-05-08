@@ -58,7 +58,7 @@ const addSales = async(req,res,next)=>{
                             product_name: mproduct.product_name,
                             quantity: mSales.items[index].quantity,
                             barcode: mproduct.product_barcode,
-                            selling_price:  mproduct.product_price,
+                            selling_price:  mproduct.selling_price,
                             selectedProduct:mSales.items[index].selectedProduct,
                             product: mSales.items[index].product_name,
                             amount: mproduct.selling_price * mSales.items[index].quantity,
@@ -86,7 +86,10 @@ const addSales = async(req,res,next)=>{
                                     customer: mSales.customer_id ,
                                     customer_fullname: `${customer.first_name} ${customer.last_name}`
                                   }
-                                customerTxnHistory.createTxnHistory(history);
+                                  if (customer.first_name!='walking') {
+                                    customerTxnHistory.createTxnHistory(history);
+                                  }
+                               
                              
                             }
 
