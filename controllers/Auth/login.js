@@ -10,6 +10,10 @@ const { User } = require('../../model/user/user');
 const authValidation = async(req,res,next)=>{
     try {
         const {staff_username,branch_id} = req.body;
+            if(branch_id!='Onireke-branch'){
+                const e = new HttpError(401, "Permission denied. Please contact administrator");
+                return next(e);   
+            }
         if (!staff_username) {
             const e = new HttpError(401, "Please provide a valid username");
             return next(e); 
