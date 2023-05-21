@@ -21,7 +21,6 @@ app.use('/api/v1/',storeRouter);
 
 
 app.use((error,req,res,next)=>{
-    console.log(error);
     if (res.headerSent) {
         return next(error)
     } else {

@@ -42,6 +42,7 @@ const { editSale } = require('../controllers/sales/edit-sale');
 const { updatemountPaid } = require('../controllers/sales/update-deposit');
 const { viewDeposit } = require('../controllers/sales/view-deposit');
 const { viewSales } = require('../controllers/sales/view-sales');
+const { initialCharge, processPayment } = require('../controllers/subscription/sub_payment');
 const { addSupplier } = require('../controllers/suppliers/add-supplier');
 const { deleteSupplier } = require('../controllers/suppliers/delete-supplier');
 const { updateSupplier } = require('../controllers/suppliers/edit-supplier');
@@ -63,6 +64,9 @@ router.post('/create-branch', createStore);
 /***Aunthenticated routes stops here */
 router.post('/register-staff',registerStaff);
 
+router.post('/add-card', initialCharge);
+
+router.post('/process-payment', processPayment);
 /***Protected routes below */
 
 
