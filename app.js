@@ -33,11 +33,14 @@ app.use((req,res,next)=>{
   res.status(404).json({status_code:404,response_message:'The requested route is not found on this server'})
 })
 
-app.listen(process.env.PORT || 6000, ()=>{
-    console.log('Inventory system server started.');
-    databaseAuthentication().then(()=>{
-        console.log('Database connected');
+
+databaseAuthentication().then(()=>{
+    console.log('Database connected');
+    app.listen(process.env.PORT || 6000, ()=>{
+        console.log('Inventory system server started.');
+       
     });
 });
+
 
 
