@@ -53,6 +53,38 @@ const viewSalesReport =async(req,res,next)=>{
 }
 
 
+const viewSalesReportPerProduct =async(req,res,next)=>{
+  try {
+    const VALIADATIONOBJECT = joi.object({
+      from: joi.date().required(),
+       to: joi.date().required(),
+       branch: joi.string().required(),
+       product_id: joi.string().required()
+  })
+    const VALIDATEDOBJECT = await VALIADATIONOBJECT.validateAsync(req.query)
+    const FILTEREDRESULTS =await  Sales.aggregate([
+          { "$match": {
+            "$and": [
+              {"product_id":VALIDATEDOBJECT.from},
+              {"branch": req.query.branch},
+              { "created_at": { "$gte": VALIDATEDOBJECT.from, "$lte": VALIDATEDOBJECT.to }},
+            ]
+          }}
+        ]);
+        if (FILTEREDRESULTS&&FILTEREDRESULTS.length>0) {
+         httpResponse({status_code:200, response_message:'Sales record available', data:FILTEREDRESULTS, res});
+        }else{
+            const e = new HttpError(404, "No record found within this range of date for this product");
+            return next(e);
+        }
+  } catch (error) {
+     joiError(error,next);
+  }
+}
+
+
+
 module.exports={
-    viewSalesReport
+    viewSalesReport,
+    viewSalesReportPerProduct
 }
