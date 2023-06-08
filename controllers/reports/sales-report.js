@@ -65,7 +65,7 @@ const viewSalesReportPerProduct =async(req,res,next)=>{
     const FILTEREDRESULTS =await  Sales.aggregate([
           { "$match": {
             "$and": [
-              {"product_id":VALIDATEDOBJECT.from},
+              {"product_id":VALIDATEDOBJECT.product_id},
               {"branch": req.query.branch},
               { "created_at": { "$gte": VALIDATEDOBJECT.from, "$lte": VALIDATEDOBJECT.to }},
             ]
