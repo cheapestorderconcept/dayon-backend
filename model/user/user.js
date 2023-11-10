@@ -55,6 +55,10 @@ userSchema.statics.findUserByUserName =async function findUserByUserName(usernam
     const user = await User.findOne({username});
     return user;
 }
+userSchema.statics.findUserById =async function findUserById(id){
+    const user = await User.findOne({_id:id});
+    return user;
+}
 
 userSchema.statics.findStaffs =async function findStaffs(username){
     const staff = await User.find({}).populate('branch');
