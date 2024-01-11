@@ -14,6 +14,20 @@ const productFieldValidation = joi.object({
   supplier: joi.string().required(),
 });
 
+const transferValidation = joi.object({
+    sendingProductId: joi.string().required(),
+    receivingProductId: joi.string().required(),
+    sendingBranchId: joi.string().required(),
+    receivingBranchId: joi.string().required(),
+    quantity:joi.any().required(),
+    transferBy: joi.string().required(),
+    sendingBranchName: joi.string().required(),
+    receivingBranchName: joi.string().required(),
+    sentProductName: joi.string().required(),
+    receivingProductName: joi.string().required(),
+    transferDate: joi.date().required()
+})
+
 const productSchema = new mongoose.Schema({
   product_name: {type: String, required:true},
   product_price: {type:Number, required:true},
@@ -23,8 +37,19 @@ const productSchema = new mongoose.Schema({
   previous_product_quantity: {type: Number, default:0},
   branch: {type: String}, 
   product_brand: {type: String},
-  supplier: {type: String, required:true}
+  supplier: {type: String,},
+  
 });
+const productTransferHistory = new mongoose.Schema({
+    sendingBranchId: {type: String}, 
+    receivingBranchId :{type: String},
+    sendingBranchName: {type:String},
+    receivingBranchName:{type:String},
+    note: {type:String},
+    transferBy: {type:String},
+    transferDate: {type:Date},
+  
+  });
 
 
 
@@ -42,9 +67,23 @@ function productPreSaveHook(data){
 }
 
 
+productSchema.statics.getTransferHistory=async function getTransferHistory(id, page, perPage) {
+    return await transferHistory.find({
+        $or:[
+            {sendingBranchId:id},
+            {receivingBranchId:id}
+        ]
+    }).sort({_id:-1})
+    .skip(page!=null?Number(page-1)*Number(perPage):(1-1)*Number(perPage))
+    .limit(perPage??40);
+}
 
 productSchema.statics.findProducts = async function findProducts(branch){
     const mproduct = await product.find({branch})
+    return mproduct;
+}
+productSchema.statics.findById = async function findById(productId,){
+    const mproduct = await product.findOne({_id:productId});
     return mproduct;
 }
 
@@ -67,6 +106,39 @@ productSchema.statics.updateProduct = async function updateProduct(productId, da
     return mproduct;
 }
 
+productSchema.statics.transferProduct = async function transferProduct(
+    sendingProductId,
+    receivingProductId,
+    sendingBranchId,
+    receivingBranchId,
+    quantity,
+    transferBy,
+    sendingBranchName,
+    receivingBranchName,
+    sentProductName,
+    receivingProductName,
+    transferDate
+){
+    const note =`
+    ${quantity} quantities of ${sentProductName} transfer to ${receivingProductName}
+    between ${sendingBranchName} and ${receivingBranchName}                    
+    `;
+    const [a,b,c] = await Promise.all([
+        product.findOneAndUpdate({_id:sendingProductId,},{$inc:{ current_product_quantity:-quantity}}),
+        product.findOneAndUpdate({_id:receivingProductId,},{$inc: {current_product_quantity:quantity}}),
+        new transferHistory({
+            sendingBranchId,
+            receivingBranchId,
+            note: note.trim(),
+            transferBy,
+            sendingBranchName,
+            receivingBranchName,
+            transferDate
+        })
+    ]);
+    return c.save()
+}
+
 productSchema.statics.manageProductSales = async function manageProductSales(product_barcode, data, branch){
     const mproduct = await product.findOneAndUpdate({product_barcode, branch},data);
     return mproduct;
@@ -74,9 +146,12 @@ productSchema.statics.manageProductSales = async function manageProductSales(pro
 
 const product = mongoose.model('product', productSchema);
 
+const transferHistory= mongoose.model('ProductTransferHistory',productTransferHistory)
 
 module.exports={
     productFieldValidation,
+    transferValidation,
     productPreSaveHook,
-    product
+    product,
+    transferHistory
 }

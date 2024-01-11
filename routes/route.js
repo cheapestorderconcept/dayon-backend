@@ -49,6 +49,7 @@ const { updateSupplier } = require('../controllers/suppliers/edit-supplier');
 const { viewAllSuppliers } = require('../controllers/suppliers/view-suppliers');
 const { verifyToken } = require('../middlewares/Authorization/jwt');
 const { isManager, isAdmin, isAdminOrEditor } = require('../middlewares/Authorization/role');
+const { transferProducts, getTransferHistory } = require('../controllers/products/transfer-product');
 
 const router = express.Router();
 
@@ -113,6 +114,8 @@ router.put('/update-brand/:brandId', updateBrand);
 
 /****PRODUCT ROUTES */
 router.post('/add-product', addProducts);
+router.post('/transfer-product', transferProducts);
+router.get('/transfer-history?', getTransferHistory);
 router.get('/view-product', viewAllProducts);
 router.get('/view-product-by-barcode/:product_barcode', viewSingleProduct);
 router.put('/update-product/:productId', updateProducts);
