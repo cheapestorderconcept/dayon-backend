@@ -24,7 +24,7 @@ const { viewPaymentType, deletePaymentType } = require('../controllers/PaymentTy
 const { addProducts } = require('../controllers/products/add-product');
 const { deleteProduct } = require('../controllers/products/delete-product');
 const { updateProducts, BalanceStockLevel } = require('../controllers/products/update-product');
-const { viewAllProducts, viewSingleProduct, viewSingleProductById } = require('../controllers/products/view-products');
+const { viewAllProducts, viewSingleProduct, viewSingleProductById, viewAllProductsbyBranch } = require('../controllers/products/view-products');
 const { addPurchase } = require('../controllers/purchase/add-purchase');
 const { deletePurchase } = require('../controllers/purchase/delete-purchase');
 const { editPurchase } = require('../controllers/purchase/edit-purchase');
@@ -54,7 +54,7 @@ const { transferProducts, getTransferHistory } = require('../controllers/product
 const router = express.Router();
 
 
-
+ 
 
 
 /***Aunthenticated starts here */
@@ -117,6 +117,7 @@ router.post('/add-product', addProducts);
 router.post('/transfer-product', transferProducts);
 router.get('/transfer-history?', getTransferHistory);
 router.get('/view-product', viewAllProducts);
+router.get('/view-product-by-branch?', viewAllProductsbyBranch);
 router.get('/view-product-by-barcode/:product_barcode', viewSingleProduct);
 router.put('/update-product/:productId', updateProducts);
 router.get('/view-single-product-by-id/:id', viewSingleProductById);

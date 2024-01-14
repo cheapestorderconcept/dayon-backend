@@ -29,6 +29,30 @@ const viewAllProducts = async(req,res,next)=>{
     }
 }
 
+const viewAllProductsbyBranch = async(req,res,next)=>{
+  try {
+    const {branch_id} = req.query;
+      const mProducts = await product.findProducts(branch_id);
+      const branchProduct = mProducts.filter(p=>p.branch==branch_id);
+      if (mProducts) {
+        httpResponse({status_code:200,response_message:'Product fetched',data:branchProduct.sort((a,b)=>{
+          const fa = a.product_name.toLowerCase()
+         const  fb = b.product_name.toLowerCase();
+         if (fa<fb) {
+           return -1;
+         }else if(fa>fb){
+           return 1
+         }else{
+           return 0
+         }
+       }),res}); 
+      }
+  } catch (error) {
+      const err = new HttpError(500, error.message);
+      return next(err);
+  }
+}
+
 const viewSingleProduct = async(req,res,next)=>{
     try {
       const {product_barcode} = req.params;
@@ -75,5 +99,6 @@ const viewSingleProductById = async(req,res,next)=>{
 module.exports={
     viewAllProducts,
     viewSingleProduct,
-    viewSingleProductById
+    viewSingleProductById,
+    viewAllProductsbyBranch
 }
