@@ -13,6 +13,10 @@ const transferProducts =async function transferProducts(req,res,next){
             const err = new HttpError(400, 'You can\'t send above what you have in stock');
             return next(err);  
         }
+        if (typeof val.quantity!='number'||!val.quantity) {
+            const err = new HttpError(400, 'Quantity must be number');
+            return next(err);    
+        }
      const {   
         sendingProductId,
         receivingProductId,

@@ -32,8 +32,9 @@ const viewAllProducts = async(req,res,next)=>{
 const viewAllProductsbyBranch = async(req,res,next)=>{
   try {
     const {branch_id} = req.query;
+    console.log(req.query)
       const mProducts = await product.findProducts(branch_id);
-      const branchProduct = mProducts.filter(p=>p.branch==branch_id);
+      const branchProduct = mProducts.filter(p=>p.branch==branch_id.trim());
       if (mProducts) {
         httpResponse({status_code:200,response_message:'Product fetched',data:branchProduct.sort((a,b)=>{
           const fa = a.product_name.toLowerCase()

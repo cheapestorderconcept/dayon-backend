@@ -124,8 +124,8 @@ productSchema.statics.transferProduct = async function transferProduct(
     between ${sendingBranchName} and ${receivingBranchName}                    
     `;
     const [a,b,c] = await Promise.all([
-        product.findOneAndUpdate({_id:sendingProductId,},{$inc:{ current_product_quantity:-quantity}}),
-        product.findOneAndUpdate({_id:receivingProductId,},{$inc: {current_product_quantity:quantity}}),
+        product.findOneAndUpdate({_id:sendingProductId,},{$inc:{ current_product_quantity:Number(-quantity)}}),
+        product.findOneAndUpdate({_id:receivingProductId,},{$inc: {current_product_quantity:Number(quantity)}}),
         new transferHistory({
             sendingBranchId,
             receivingBranchId,
