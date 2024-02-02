@@ -32,7 +32,6 @@ const viewAllProducts = async(req,res,next)=>{
 const viewAllProductsbyBranch = async(req,res,next)=>{
   try {
     const {branch_id} = req.query;
-    console.log(req.query)
       const mProducts = await product.findProducts(branch_id);
       const branchProduct = mProducts.filter(p=>p.branch==branch_id.trim());
       if (mProducts) {

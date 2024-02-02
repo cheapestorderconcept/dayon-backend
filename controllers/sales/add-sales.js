@@ -35,7 +35,7 @@ const addSales = async(req,res,next)=>{
        }   
        
        for (let index = 0; index < mSales.items.length; index++) {
-        if(mSales.items[index].quantity==0){
+        if(Number(mSales.items[index].quantity)==0||!mSales.items[index].quantity){
             const e = new HttpError(400, "One of your items has zero has quantity. Quantity must be greater or equals 1");
              return next(e);  
            }

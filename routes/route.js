@@ -48,7 +48,7 @@ const { deleteSupplier } = require('../controllers/suppliers/delete-supplier');
 const { updateSupplier } = require('../controllers/suppliers/edit-supplier');
 const { viewAllSuppliers } = require('../controllers/suppliers/view-suppliers');
 const { verifyToken } = require('../middlewares/Authorization/jwt');
-const { isManager, isAdmin, isAdminOrEditor } = require('../middlewares/Authorization/role');
+const { isManager, isAdmin, isAdminOrEditor, isAdminOrOperator } = require('../middlewares/Authorization/role');
 const { transferProducts, getTransferHistory } = require('../controllers/products/transfer-product');
 
 const router = express.Router();
@@ -119,11 +119,11 @@ router.get('/transfer-history?', getTransferHistory);
 router.get('/view-product', viewAllProducts);
 router.get('/view-product-by-branch?', viewAllProductsbyBranch);
 router.get('/view-product-by-barcode/:product_barcode', viewSingleProduct);
-router.put('/update-product/:productId', updateProducts);
+router.put('/update-product/:productId',isAdmin, updateProducts);
 router.get('/view-single-product-by-id/:id', viewSingleProductById);
 /****ADD SALES ROUTES*/
 
-router.post('/add-sales', addSales);
+router.post('/add-sales',isAdminOrOperator, addSales);
 router.get('/view-sales', viewSales);
 router.delete('/delete-sales/:id', isAdmin,deleteSale);
 router.put('/update-sales/:id', isAdmin,editSale);
@@ -179,7 +179,7 @@ router.get('/view-sales-report?', isAdmin ,viewSalesReport);
 router.get('/view-product-sales-report?',viewSalesReportPerProduct);
 router.get('/view-stock-level?', isAdmin,stockLevel);
 router.put('/balance-stock-level/:id', isAdminOrEditor,BalanceStockLevel);
-router.delete('/delete-product/:id', deleteProduct);
+router.delete('/delete-product/:id', isAdmin,deleteProduct);
 router.get('/view-profit-loss', isAdmin,viewProfitLossReport);
 
 module.exports=router;

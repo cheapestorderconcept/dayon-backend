@@ -7,6 +7,7 @@ const { product, transferValidation } = require("../../model/products/products")
 
 const transferProducts =async function transferProducts(req,res,next){
      try {
+        const {branch_id} = req.userData;
         const val = await transferValidation.validateAsync(req.body);
         const productStock = await product.findById(val.sendingProductId);
         if (productStock.current_product_quantity<val.quantity) {
@@ -30,6 +31,10 @@ const transferProducts =async function transferProducts(req,res,next){
         receivingProductName,
         transferDate
     } = req.body;
+    if (sendingBranchName==receivingBranchName) {
+        const err = new HttpError(400, 'Product transfer within same branch not allowed');
+        return next(err);    
+    }
         const transferHistory = await product.transferProduct( 
             sendingProductId,
             receivingProductId,
