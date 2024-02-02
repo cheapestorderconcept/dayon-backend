@@ -62,8 +62,8 @@ router.get('/view-branch', listAllStores);
 
 router.post('/login',authValidation, loginStaff);
 router.post('/create-branch', createStore);
-/***Aunthenticated routes stops here */
-router.post('/register-staff',registerStaff);
+// /***Aunthenticated routes stops here */
+// router.post('/register-staff',isAdminOrEditor,registerStaff);
 
 router.post('/add-card', initialCharge);
 
@@ -77,6 +77,8 @@ router.delete('/delete-branch/:id', deleteBranch);
 
 router.put('/update-branch/:id', editBranch);
 
+
+router.post('/register-staff',isAdminOrEditor,registerStaff);
 
 // router.post('register-staff', registerStaff);
 router.get('/profile', staffProfile);
