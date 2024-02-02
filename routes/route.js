@@ -114,7 +114,7 @@ router.put('/update-brand/:brandId', updateBrand);
 
 /****PRODUCT ROUTES */
 router.post('/add-product', addProducts);
-router.post('/transfer-product', transferProducts);
+router.post('/transfer-product', isAdminOrEditor,transferProducts);
 router.get('/transfer-history?', getTransferHistory);
 router.get('/view-product', viewAllProducts);
 router.get('/view-product-by-branch?', viewAllProductsbyBranch);
@@ -136,7 +136,7 @@ router.post('/add-purchase', addPurchase);
 
 router.get('/view-purchase', viewPurchase);
 
-router.put('/update-purchase/:id', editPurchase);
+router.put('/update-purchase/:id', isAdminOrEditor,editPurchase);
 
 router.delete('/delete-purchase/:id', isAdmin,deletePurchase);
 /****PAYMENT TYPE */
