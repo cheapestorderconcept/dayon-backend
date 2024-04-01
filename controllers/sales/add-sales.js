@@ -35,10 +35,7 @@ const addSales = async(req,res,next)=>{
        }   
        
        for (let index = 0; index < mSales.items.length; index++) {
-        // if(Number(mSales.items[index].quantity)==0||!mSales.items[index].quantity){
-        //     const e = new HttpError(400, "One of your items has zero has quantity. Quantity must be greater or equals 1");
-        //      return next(e);  
-        //    }
+       
          const mproduct =await findProduct(mSales.items[index]._id,branch_id);
                 if (mproduct) {
                     const datas = {
@@ -95,7 +92,7 @@ const addSales = async(req,res,next)=>{
 
                         })
                        }else{
-                        const e = new HttpError(400, `Please check ${mSales.items[index].product_name} quantity`);
+                        const e = new HttpError(400, `${mSales.items[index].product_name} quantity can not be 0 or greater than stock quantity`);
                         return next(e);  
                        }
                 }else{
