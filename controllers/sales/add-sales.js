@@ -35,17 +35,17 @@ const addSales = async(req,res,next)=>{
        }   
        
        for (let index = 0; index < mSales.items.length; index++) {
-        if(Number(mSales.items[index].quantity)==0||!mSales.items[index].quantity){
-            const e = new HttpError(400, "One of your items has zero has quantity. Quantity must be greater or equals 1");
-             return next(e);  
-           }
+        // if(Number(mSales.items[index].quantity)==0||!mSales.items[index].quantity){
+        //     const e = new HttpError(400, "One of your items has zero has quantity. Quantity must be greater or equals 1");
+        //      return next(e);  
+        //    }
          const mproduct =await findProduct(mSales.items[index]._id,branch_id);
                 if (mproduct) {
                     const datas = {
                         current_product_quantity: Number(mproduct.current_product_quantity) -Number(mSales.items[index].quantity),
                         previous_product_quantity: Number(mproduct.current_product_quantity)
                     }  
-                    if (mSales.items[index].quantity <= mproduct.current_product_quantity) {
+                    if (mSales.items[index].quantity <= mproduct.current_product_quantity&&mSales.items[index].quantity>0) {
                         await updateProduct(mproduct._id,branch_id,datas);
                         const data = {
                             invoice_number:mSales.invoice_number,
@@ -95,7 +95,7 @@ const addSales = async(req,res,next)=>{
 
                         })
                        }else{
-                        const e = new HttpError(400, "Out of stock");
+                        const e = new HttpError(400, `Please check ${mSales.items[index].product_name} quantity`);
                         return next(e);  
                        }
                 }else{
